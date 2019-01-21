@@ -9,9 +9,9 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
-    path: Assets/Planet Snake/Scenes/Menu.unity
+    path: Assets/Planet Snake/Scenes/PlanetSnake.unity
     guid: db7e28f0065727d4bba2b8c903041c66
-  - enabled: 1
-    path: Assets/Planet Snake/Scenes/Planet Snake Level 1.unity
-    guid: 6d06e9d8366097140b7558a24893d9d0
+  - enabled: 0
+    path: 
+    guid: 00000000000000000000000000000000
   m_configObjects: {}
