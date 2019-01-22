@@ -9,8 +9,12 @@ public class GameManager : MonoBehaviour
     public List<GameObject> Collectables;
     public Text ScoreText;
     public float RadiusOffset = 2.0f;
+    public GameObject MainMenuCanvas;
+    public GameObject UICanvas;
+    //public Canvas PauseCanvas;
+    [HideInInspector]
+    public bool InGame;
 
-    [SerializeField]
     private float _radius;
     private int _gameScore;
 
@@ -18,8 +22,9 @@ public class GameManager : MonoBehaviour
     {
         transform.position = Planet.transform.position;
         _radius = Planet.GetComponent<SphereCollider>().radius;
-        SpawnCollectable();
-        _gameScore = 0;
+        
+        InGame = false;
+        UICanvas.SetActive(false);
     }
 
     private void OnDrawGizmos()
@@ -35,49 +40,7 @@ public class GameManager : MonoBehaviour
     /// <returns></returns>
     private Vector3 getRandomPosition()
     {
-        float max, x, y, z, remainder;
-        max = 0;
-        string choice = "";
-
-        Vector3 initialPos = Random.insideUnitSphere * _radius;
-
-        x =  Mathf.Abs(initialPos.x);
-        y =  Mathf.Abs(initialPos.y);
-        z =  Mathf.Abs(initialPos.z);
-
-        if(max < x)
-        {
-            max = x;
-            choice = "x";
-        }
-        if(max < y)
-        {
-            max = y;
-            choice = "y";
-        }
-        if(max < z)
-        {
-            max = z;
-            choice = "z";
-        }
-
-        if(choice == "x")
-        {
-            remainder = _radius - initialPos.x;
-            initialPos.x += remainder;
-        }
-        else if (choice == "y")
-        {
-            remainder = _radius - initialPos.y;
-            initialPos.y += remainder;
-        }
-        else if (choice == "z")
-        {
-            remainder = _radius - initialPos.z;
-            initialPos.z += remainder;
-        }
-
-        return initialPos;
+        return Random.onUnitSphere * (_radius + RadiusOffset);
     }
 
     /// <summary>
@@ -114,5 +77,13 @@ public class GameManager : MonoBehaviour
     {
         _gameScore += score;
         ScoreText.text = _gameScore.ToString();
+    }
+
+    public void StartGame()
+    {
+        SpawnCollectable();
+        _gameScore = 0;
+        InGame = true;
+        MainMenuCanvas.SetActive(false);
     }
 }

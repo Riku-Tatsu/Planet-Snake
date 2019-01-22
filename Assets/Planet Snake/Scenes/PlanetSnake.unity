@@ -178,7 +178,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 10
-  rotationSpeed: 180
+  rotationSpeed: 100
 --- !u!114 &76464184
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -752,8 +752,10 @@ MonoBehaviour:
   - {fileID: 1123086717352082, guid: ff8647e8026cc424d85955a9252ae290, type: 2}
   - {fileID: 1123086717352082, guid: 49bc26c042c9e6241886e192ad9d588a, type: 2}
   ScoreText: {fileID: 1622434536}
-  RadiusOffset: 2
-  _radius: 0
+  RadiusOffset: 0.5
+  MainMenuCanvas: {fileID: 1921356689}
+  UICanvas: {fileID: 558301570}
+  InGame: 0
 --- !u!4 &666733921
 Transform:
   m_ObjectHideFlags: 0
