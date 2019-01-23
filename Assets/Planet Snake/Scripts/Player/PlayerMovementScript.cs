@@ -8,8 +8,12 @@ public class PlayerMovementScript : MonoBehaviour
     #region members
 
     #region Public
-    public float moveSpeed;
+    public float  moveSpeed;
     public float rotationSpeed = 180.0f;
+
+    
+    [HideInInspector]
+    public bool _playing;
     #endregion
 
     #region private
@@ -17,6 +21,7 @@ public class PlayerMovementScript : MonoBehaviour
     private Rigidbody rBody;
     private Quaternion TurnRotation;
     private float input;
+    private GameManager _managerRefrence;
     #endregion
 
     #endregion
@@ -26,22 +31,38 @@ public class PlayerMovementScript : MonoBehaviour
     void Start()
     {
         rBody = GetComponent<Rigidbody>();
+        _playing = true;
+        _managerRefrence = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
 
     }
     void Update()
     {
         input = Input.GetAxisRaw("Horizontal");
+        if(Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+        {
+            _managerRefrence.Points.Add(transform.position);
+            Debug.Log(transform.position);
+        }
     }
 
     void FixedUpdate()
     {
-        //Moving
-        rBody.MovePosition(rBody.position + transform.forward * moveSpeed * Time.deltaTime);
+        if(_playing)
+        {
+            //Moving
+            rBody.MovePosition(rBody.position + transform.forward * moveSpeed * Time.deltaTime);
         
-        //Turning
-        Quaternion Rotation = Quaternion.Euler(0, input * rotationSpeed * Time.deltaTime, 0);
-        transform.rotation *= Rotation;
+            //Turning
+            Quaternion Rotation = Quaternion.Euler(0, input * rotationSpeed * Time.deltaTime, 0);
+            transform.rotation *= Rotation;
+        }
 
+    }
+
+    public void UpdateSpeed(float MoveIncreaseValue, float RotationIncreaseValue)
+    {
+        moveSpeed += MoveIncreaseValue;
+        rotationSpeed += RotationIncreaseValue;
     }
     #endregion
 

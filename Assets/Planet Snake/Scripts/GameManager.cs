@@ -5,26 +5,48 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    #region members
+
+    #region public
+    [Header("Main")]
+    [Space(10)]
+    public GameObject Player;
     public GameObject Planet;
-    public List<GameObject> Collectables;
-    public Text ScoreText;
     public float RadiusOffset = 2.0f;
+    
+    [Header("Collectables & Spikes")]
+    [Space (10)]
+    public List<GameObject> Collectables;
+    public GameObject Spike;
+    [Header("UI")]
+    [Space(10)]
+    public Text ScoreText;
     public GameObject MainMenuCanvas;
     public GameObject UICanvas;
     //public Canvas PauseCanvas;
     [HideInInspector]
     public bool InGame;
+    public List<Vector3> Points;
+    #endregion
 
+    #region private
     private float _radius;
-    private int _gameScore;
+    private int _gameScore; 
+    private float _timer;
+    #endregion
 
+    #endregion
+
+    #region Methods
+
+    #region setup
     private void Start()
     {
         transform.position = Planet.transform.position;
         _radius = Planet.GetComponent<SphereCollider>().radius;
-        
         InGame = false;
         UICanvas.SetActive(false);
+        Points = new List<Vector3>();
     }
 
     private void OnDrawGizmos()
@@ -32,12 +54,9 @@ public class GameManager : MonoBehaviour
         Gizmos.color = Color.cyan;
         Gizmos.DrawWireSphere(transform.position, _radius);
     }
+    #endregion
 
-
-    /// <summary>
-    /// should take another look at this 
-    /// </summary>
-    /// <returns></returns>
+    #region Collectables and Spikes
     private Vector3 getRandomPosition()
     {
         return Random.onUnitSphere * (_radius + RadiusOffset);
@@ -73,6 +92,14 @@ public class GameManager : MonoBehaviour
         Instantiate(DecideSpawnedCollectable(), getRandomPosition(), Quaternion.identity);
     }
 
+    public void SpawnBomb()
+    {
+        Instantiate(Spike, getRandomPosition(), Quaternion.identity);
+    }
+
+    #endregion
+
+    #region UI
     public void UpdateScore(int score)
     {
         _gameScore += score;
@@ -85,5 +112,23 @@ public class GameManager : MonoBehaviour
         _gameScore = 0;
         InGame = true;
         MainMenuCanvas.SetActive(false);
+        UICanvas.SetActive(true);
     }
+    #endregion
+
+    private void Update()
+    {
+      
+    }
+
+    #endregion
+
+
+
+
+
+
+
+
+
 }

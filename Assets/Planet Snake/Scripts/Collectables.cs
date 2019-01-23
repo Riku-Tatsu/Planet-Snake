@@ -27,6 +27,12 @@ public class Collectables : MonoBehaviour {
 		{
             _managerRefrence.UpdateScore(ScoreValue);
             _managerRefrence.SpawnCollectable();
+            _managerRefrence.SpawnBomb();
+            _managerRefrence.Player.GetComponent<PlayerScript>().GrowBody();
+            Animator anime = other.GetComponentInChildren<Animator>();
+            //reconsider triggering animation before eating
+            anime.SetTrigger("eat");
+            anime.SetTrigger("ate");
 			Destroy(gameObject);
 		}
 	}
