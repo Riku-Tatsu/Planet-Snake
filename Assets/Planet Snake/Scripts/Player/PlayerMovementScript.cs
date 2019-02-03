@@ -11,6 +11,7 @@ public class PlayerMovementScript : MonoBehaviour
     public float  moveSpeed;
     public float rotationSpeed = 180.0f;
     public float minDis = 0.25f;
+    public float Timer = 2.0f;
 
     
     [HideInInspector]
@@ -26,6 +27,9 @@ public class PlayerMovementScript : MonoBehaviour
     private float _dis;
     private Transform currBodyPart;
     private Transform prevBodyPart;
+    private float _timer;
+    [SerializeField]
+    private List<Transform> TrailSegments = new List<Transform>();
     #endregion
 
     #endregion
@@ -37,23 +41,25 @@ public class PlayerMovementScript : MonoBehaviour
         rBody = GetComponent<Rigidbody>();
         _playing = true;
         _managerRefrence = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
-
+        _timer = 0;
     }
     void Update()
     {
-        input = Input.GetAxisRaw("Horizontal");
-        //if(Input.GetKeyUp(KeyCode.A) || Input.GetKeyUp(KeyCode.D))
+        //input = Input.GetAxisRaw("Horizontal");
+        //_timer += 1 * Time.deltaTime;
+        //if (_timer >= Timer)
         //{
-        //    _managerRefrence.Points.Add(transform.position);
-        //    Debug.Log(transform.position);
+        //    TrailSegments.Add(transform);
+        //    _timer = 0;
         //}
-       // _managerRefrence.Points.Add(transform.position);
+
+        //TrailSegments.Add(transform);
     }
 
     void FixedUpdate()
     {
         Move();
-
+        //Move_Modified();
     }
 
     public void UpdateSpeed(float MoveIncreaseValue, float RotationIncreaseValue)
@@ -91,13 +97,62 @@ public class PlayerMovementScript : MonoBehaviour
 
                 float T = Time.deltaTime * _dis / minDis * moveSpeed;
 
-                //if (T > 0.5f)
-                //    T = 0.5f;
+                if (T > 0.5f)
+                    T = 0.5f;
 
                 currBodyPart.position = Vector3.Slerp(currBodyPart.position, newpos, T);
                 currBodyPart.rotation = Quaternion.Slerp(currBodyPart.rotation, prevBodyPart.rotation, T);
             }
         }
+    }
+
+    private void Move_Modified()
+    {
+        if(_playing)
+        {
+            //Moving
+            rBody.MovePosition(rBody.position + transform.forward * moveSpeed * Time.smoothDeltaTime);
+
+            //Turning
+            Quaternion Rotation = Quaternion.Euler(0, input * rotationSpeed * Time.deltaTime, 0);
+            transform.rotation *= Rotation;
+
+            PlayerScript script = _managerRefrence.Player.GetComponent<PlayerScript>();
+
+            for (int i = 0; i < script.bodyParts.Count; i++)
+            {
+                currBodyPart = script.bodyParts[i];
+
+                for (int j = 0; j < TrailSegments.Count; j++)
+                {
+                    prevBodyPart = TrailSegments[j];
+
+                    _dis = Vector3.Distance(prevBodyPart.position, currBodyPart.position);
+
+                    Vector3 newpos = prevBodyPart.position;
+
+                    float targetDist = minDis * i + 1;
+
+                    float T = Time.deltaTime * _dis / targetDist * moveSpeed;
+
+                    if (T > 0.5f)
+                        T = 0.5f;
+
+                    currBodyPart.position = Vector3.Slerp(currBodyPart.position, newpos, T);
+                    currBodyPart.rotation = Quaternion.Slerp(currBodyPart.rotation, prevBodyPart.rotation, T);
+                }
+            }
+        }
+    }
+
+    public void RotationButtons(int dir)
+    {
+        if (dir < 0)
+            input = -1;
+        else if (dir > 0)
+            input = 1;
+        else
+            input = 0;
     }
     #endregion
 

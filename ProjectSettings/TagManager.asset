@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Keep
   - GameManager
+  - Collectables
+  - Spike
   layers:
   - Default
   - TransparentFX

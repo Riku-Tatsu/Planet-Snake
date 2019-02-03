@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public GameObject Player;
     public GameObject Planet;
     public float RadiusOffset = 2.0f;
+    public Vector3 StartPositon = new Vector3(0, 0, -13f);
+    public int startingNum = 5;
     
     [Header("Collectables & Spikes")]
     [Space (10)]
@@ -23,18 +25,21 @@ public class GameManager : MonoBehaviour
     [Header("UI")]
     [Space(10)]
     public Text ScoreText;
+    public Text GameOverScore;
+    public GameObject PauseText;
     public GameObject MainMenuCanvas;
     public GameObject UICanvas;
+    public GameObject GameOverPanel;
     //public Canvas PauseCanvas;
     [HideInInspector]
     public bool InGame;
-    public List<Vector3> Points;
     #endregion
 
     #region private
     private float _radius;
     private int _gameScore; 
     private float _timer;
+    private bool _pauseGame;
     #endregion
 
     #endregion
@@ -48,7 +53,9 @@ public class GameManager : MonoBehaviour
         _radius = Planet.GetComponent<SphereCollider>().radius;
         InGame = false;
         UICanvas.SetActive(false);
-        Points = new List<Vector3>();
+        GameOverPanel.SetActive(false);
+        _pauseGame = false;
+        Player.GetComponent<PlayerScript>().InitPlayer(StartPositon, startingNum);
     }
 
     private void OnDrawGizmos()
@@ -117,6 +124,57 @@ public class GameManager : MonoBehaviour
         InGame = true;
         MainMenuCanvas.SetActive(false);
         UICanvas.SetActive(true);
+        Player.GetComponent<PlayerScript>().InitPlayer(StartPositon, 0);
+    }
+
+    public void PauseGame()
+    {
+        _pauseGame = !_pauseGame;
+        if(_pauseGame)
+        {
+            PauseText.SetActive(true);
+            Time.timeScale = 0;
+        }
+        else
+        {
+            PauseText.SetActive(false);
+            Time.timeScale = 1;
+        }
+    }
+
+    public void GameOver()
+    {
+        InGame = false;
+        UICanvas.SetActive(false);
+        GameOverScore.text = _gameScore.ToString();
+        GameOverPanel.SetActive(true);   
+    }
+
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void Restart()
+    {
+        _gameScore = 0;
+        UpdateScore(0);
+        GameObject[] Collectables = GameObject.FindGameObjectsWithTag("Collectables");
+        foreach (var collectable in Collectables)
+        {
+            Destroy(collectable.gameObject);
+        }
+
+        GameObject[] Spikes = GameObject.FindGameObjectsWithTag("Spike");
+        foreach (var spike in Spikes)
+        {
+            Destroy(spike.gameObject);
+        }
+        Player.GetComponent<PlayerScript>().InitPlayer(StartPositon, 0);
+        Player.GetComponent<PlayerMovementScript>()._playing = true;
+        UICanvas.SetActive(true);
+        GameOverPanel.SetActive(false);
+        SpawnCollectable();
     }
     #endregion
 

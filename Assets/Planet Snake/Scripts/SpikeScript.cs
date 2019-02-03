@@ -18,6 +18,7 @@ public class SpikeScript : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             _managerRefrence.Player.GetComponent<PlayerMovementScript>()._playing = false;
+            _managerRefrence.Player.GetComponent<PlayerScript>().PlayerDeath();
             Debug.Log("DEAAAAAAAAAAAAD!!!!!!!!!");
             Destroy(gameObject);
         }

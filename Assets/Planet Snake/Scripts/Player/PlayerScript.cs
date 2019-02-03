@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
+
+    #region memebers
+
+    #region public
     public List<Transform> bodyParts = new List<Transform>();
     public float SpeedTimer = 30;
     public float MoveIncreaseValue = 2;
@@ -11,60 +15,44 @@ public class PlayerScript : MonoBehaviour
     public GameObject BodyPrefab;
     public GameObject BodyHolderPrefab;
 
+    public float DeathAnimationSpeed = 0.3f;
 
+    #endregion
 
+    #region private
     private PlayerMovementScript _movementScript;
     private GameManager _managerRefrence;
     private float _timer;
-    private int _bodyIndex;
 
+    #endregion
 
+    #endregion
+
+    #region methods
     void Start()
     {
         _managerRefrence = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
         _movementScript = GetComponent<PlayerMovementScript>();
         _timer = SpeedTimer;
-        _bodyIndex = 0;
     }
 
     private void Update()
     {
-        if(_managerRefrence.InGame)
+        if (_managerRefrence.InGame)
         {
             _timer -= 1 * Time.deltaTime;
             if (_timer <= 0)
             {
                 _movementScript.UpdateSpeed(MoveIncreaseValue, RotationIncreaseValue);
 
-                //foreach (var part in body)
-                //{
-                //    BodyMovementScript script = part.GetComponent<BodyMovementScript>();
-                //    script.UpdateSpeed(MoveIncreaseValue);
-                //}
                 _timer = SpeedTimer;
             }
         }
-        
+
     }
 
     public void GrowBody()
     {
-        //Vector3 Pos;
-        //if (body.Count == 0)
-        //{
-        //    Pos = GetComponentInChildren<Expansion>().transform.position;
-        //    _bodyIndex -= 1;
-        //}
-        //else
-        //    Pos = body[_bodyIndex].GetComponentInChildren<Expansion>().transform.position;
-
-        //GameObject bodyPart = Instantiate(BodyPrefab, Pos, Quaternion.identity);
-        //bodyPart.transform.parent = null;
-        //bodyPart.GetComponent<BodyMovementScript>().PartIndex = _bodyIndex + 1;
-        //body.Add(bodyPart);
-
-        //_bodyIndex++;
-
         Transform prevBodyPart;
 
         if (bodyParts.Count == 0)
@@ -75,6 +63,46 @@ public class PlayerScript : MonoBehaviour
         Transform newPart = (Instantiate(BodyPrefab, prevBodyPart.position, prevBodyPart.rotation) as GameObject).transform;
         newPart.SetParent(BodyHolderPrefab.transform);
         bodyParts.Add(newPart);
-            
+
     }
+
+    public void PlayerDeath()
+    {
+        StartCoroutine("DeathRoutine");
+    }
+
+    private IEnumerator DeathRoutine()
+    {
+        for (int i = bodyParts.Count - 1; i >= 0; i--)
+        {
+            Destroy(bodyParts[i].gameObject);
+            bodyParts.Remove(bodyParts[i]);
+            yield return new WaitForSeconds(DeathAnimationSpeed);
+        }
+
+        _managerRefrence.GameOver();
+    }
+
+    public void InitPlayer(Vector3 startPos, int BodyNum)
+    {
+        for(int i = 0; i < bodyParts.Count; i++)
+        {
+            Destroy(bodyParts[i].gameObject);
+           // bodyParts.Remove(bodyParts[i]);
+        }
+        bodyParts.Clear();
+
+
+        transform.position = startPos;
+        
+        for(int i = 0; i < BodyNum; i++)
+        {
+            GrowBody();
+        }
+    }
+    #endregion
+
+
+
+
 }
