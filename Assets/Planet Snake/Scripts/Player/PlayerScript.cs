@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    public List<GameObject> body;
+    public List<Transform> bodyParts = new List<Transform>();
     public float SpeedTimer = 30;
     public float MoveIncreaseValue = 2;
     public float RotationIncreaseValue = 1.5f;
     public GameObject BodyPrefab;
+    public GameObject BodyHolderPrefab;
 
 
 
@@ -35,11 +36,11 @@ public class PlayerScript : MonoBehaviour
             {
                 _movementScript.UpdateSpeed(MoveIncreaseValue, RotationIncreaseValue);
 
-                foreach (var part in body)
-                {
-                    BodyMovementScript script = part.GetComponent<BodyMovementScript>();
-                    script.UpdateSpeed(MoveIncreaseValue);
-                }
+                //foreach (var part in body)
+                //{
+                //    BodyMovementScript script = part.GetComponent<BodyMovementScript>();
+                //    script.UpdateSpeed(MoveIncreaseValue);
+                //}
                 _timer = SpeedTimer;
             }
         }
@@ -48,21 +49,32 @@ public class PlayerScript : MonoBehaviour
 
     public void GrowBody()
     {
-        Vector3 Pos;
-        if (body.Count == 0)
-        {
-            Pos = GetComponentInChildren<Expansion>().transform.position;
-            _bodyIndex -= 1;
-        }
+        //Vector3 Pos;
+        //if (body.Count == 0)
+        //{
+        //    Pos = GetComponentInChildren<Expansion>().transform.position;
+        //    _bodyIndex -= 1;
+        //}
+        //else
+        //    Pos = body[_bodyIndex].GetComponentInChildren<Expansion>().transform.position;
+
+        //GameObject bodyPart = Instantiate(BodyPrefab, Pos, Quaternion.identity);
+        //bodyPart.transform.parent = null;
+        //bodyPart.GetComponent<BodyMovementScript>().PartIndex = _bodyIndex + 1;
+        //body.Add(bodyPart);
+
+        //_bodyIndex++;
+
+        Transform prevBodyPart;
+
+        if (bodyParts.Count == 0)
+            prevBodyPart = transform;
         else
-            Pos = body[_bodyIndex].GetComponentInChildren<Expansion>().transform.position;
+            prevBodyPart = bodyParts[bodyParts.Count - 1];
 
-        GameObject bodyPart = Instantiate(BodyPrefab, Pos, Quaternion.identity);
-        bodyPart.transform.parent = null;
-        bodyPart.GetComponent<BodyMovementScript>().PartIndex = _bodyIndex + 1;
-        body.Add(bodyPart);
-
-        _bodyIndex++;
+        Transform newPart = (Instantiate(BodyPrefab, prevBodyPart.position, prevBodyPart.rotation) as GameObject).transform;
+        newPart.SetParent(BodyHolderPrefab.transform);
+        bodyParts.Add(newPart);
             
     }
 }

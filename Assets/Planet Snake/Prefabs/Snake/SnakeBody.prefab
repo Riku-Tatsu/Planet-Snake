@@ -24,43 +24,13 @@ GameObject:
   - component: {fileID: 135419328126702046}
   - component: {fileID: 54341587559177238}
   - component: {fileID: 114499674878853356}
-  - component: {fileID: 114947430465003696}
-  m_Layer: 0
-  m_Name: SnakeTail
+  m_Layer: 9
+  m_Name: SnakeBody
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!1 &1746113214286962
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 4154597465414996}
-  - component: {fileID: 114305452066716330}
-  m_Layer: 0
-  m_Name: Expansion
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &4154597465414996
-Transform:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1746113214286962}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.09, z: -0.968}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 4855182990654164}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4855182990654164
 Transform:
   m_ObjectHideFlags: 1
@@ -70,8 +40,7 @@ Transform:
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: -1.2, z: -13.21}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 4154597465414996}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -132,17 +101,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
---- !u!114 &114305452066716330
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1746113214286962}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f222f8d504e1b484ebdec3c520e22d22, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &114499674878853356
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -155,18 +113,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attractorPlanet: {fileID: 0}
---- !u!114 &114947430465003696
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1123086717352082}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6ed26274cba5a3a4583cd0a8fb278a8f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PartIndex: 0
 --- !u!135 &135419328126702046
 SphereCollider:
   m_ObjectHideFlags: 1

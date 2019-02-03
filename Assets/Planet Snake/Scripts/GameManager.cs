@@ -17,7 +17,9 @@ public class GameManager : MonoBehaviour
     [Header("Collectables & Spikes")]
     [Space (10)]
     public List<GameObject> Collectables;
+    public GameObject CollectablesHolder;
     public GameObject Spike;
+    public GameObject SpikesHolder;
     [Header("UI")]
     [Space(10)]
     public Text ScoreText;
@@ -89,12 +91,14 @@ public class GameManager : MonoBehaviour
 
     public void SpawnCollectable()
     {
-        Instantiate(DecideSpawnedCollectable(), getRandomPosition(), Quaternion.identity);
+        GameObject Collectable =  Instantiate(DecideSpawnedCollectable(), getRandomPosition(), Quaternion.identity);
+        Collectable.transform.SetParent(CollectablesHolder.transform);
     }
 
     public void SpawnBomb()
     {
-        Instantiate(Spike, getRandomPosition(), Quaternion.identity);
+        GameObject spike = Instantiate(Spike, getRandomPosition(), Quaternion.identity);
+        spike.transform.SetParent(SpikesHolder.transform);
     }
 
     #endregion
