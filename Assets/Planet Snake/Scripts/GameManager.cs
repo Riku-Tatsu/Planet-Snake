@@ -15,10 +15,11 @@ public class GameManager : MonoBehaviour
     public float RadiusOffset = 2.0f;
     public Vector3 StartPositon = new Vector3(0, 0, -13f);
     public int startingNum = 5;
+    public float startingSpeed = 5f;
     
     [Header("Collectables & Spikes")]
     [Space (10)]
-    public List<GameObject> Collectables;
+    //public List<GameObject> Collectables;
     public GameObject CollectablesHolder;
     public GameObject Spike;
     public GameObject SpikesHolder;
@@ -55,7 +56,7 @@ public class GameManager : MonoBehaviour
         UICanvas.SetActive(false);
         GameOverPanel.SetActive(false);
         _pauseGame = false;
-        Player.GetComponent<PlayerScript>().InitPlayer(StartPositon, startingNum);
+        Player.GetComponent<PlayerScript>().InitPlayer(StartPositon, startingNum, startingSpeed);
     }
 
     private void OnDrawGizmos()
@@ -79,27 +80,29 @@ public class GameManager : MonoBehaviour
     /// index 3 --> 5% 
     /// </summary>
     /// <returns></returns>
-    private GameObject DecideSpawnedCollectable()
+    private string DecideSpawnedCollectable()
     {
-        GameObject collectable = Collectables[0];
+        string collectableTag = "";
         int rndNum = Random.Range(0, 100);
 
         if (rndNum > 0 && rndNum <= 50)
-            collectable = Collectables[0];
+            collectableTag = "Red";
         else if (rndNum > 50 && rndNum <= 80)
-            collectable = Collectables[1];
+            collectableTag = "Blue";
         else if (rndNum > 80 && rndNum <= 95)
-            collectable = Collectables[2];
+            collectableTag = "Yellow";
         else if (rndNum > 95 && rndNum <= 100)
-            collectable = Collectables[3];
+            collectableTag = "Purple";
 
-        return collectable;
+        return collectableTag;
     }
 
     public void SpawnCollectable()
     {
-        GameObject Collectable =  Instantiate(DecideSpawnedCollectable(), getRandomPosition(), Quaternion.identity);
-        Collectable.transform.SetParent(CollectablesHolder.transform);
+        //GameObject Collectable =  Instantiate(DecideSpawnedCollectable(), getRandomPosition(), Quaternion.identity);
+        //Collectable.transform.SetParent(CollectablesHolder.transform);
+
+        CollectablesHolder.GetComponent<ObjectPooler>().SpawnPool(DecideSpawnedCollectable(), getRandomPosition(), Quaternion.identity, true);
     }
 
     public void SpawnBomb()
@@ -124,7 +127,7 @@ public class GameManager : MonoBehaviour
         InGame = true;
         MainMenuCanvas.SetActive(false);
         UICanvas.SetActive(true);
-        Player.GetComponent<PlayerScript>().InitPlayer(StartPositon, 0);
+        Player.GetComponent<PlayerScript>().InitPlayer(StartPositon, 0, startingSpeed);
     }
 
     public void PauseGame()
@@ -170,7 +173,7 @@ public class GameManager : MonoBehaviour
         {
             Destroy(spike.gameObject);
         }
-        Player.GetComponent<PlayerScript>().InitPlayer(StartPositon, 0);
+        Player.GetComponent<PlayerScript>().InitPlayer(StartPositon, 0, startingSpeed);
         Player.GetComponent<PlayerMovementScript>()._playing = true;
         UICanvas.SetActive(true);
         GameOverPanel.SetActive(false);

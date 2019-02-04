@@ -83,7 +83,7 @@ public class PlayerScript : MonoBehaviour
         _managerRefrence.GameOver();
     }
 
-    public void InitPlayer(Vector3 startPos, int BodyNum)
+    public void InitPlayer(Vector3 startPos, int BodyNum, float startingSpeed)
     {
         for(int i = 0; i < bodyParts.Count; i++)
         {
@@ -99,6 +99,8 @@ public class PlayerScript : MonoBehaviour
         {
             GrowBody();
         }
+
+        GetComponent<PlayerMovementScript>().moveSpeed = startingSpeed;
     }
     #endregion
 
