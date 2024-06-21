@@ -157,7 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   armatureOrigin: {fileID: 592807121}
   bodySegmentPrefab: {fileID: 7800910063224554435, guid: d06f8770d677a104a8ce98c942d5c4ed, type: 3}
-  segmentSpacing: 2
+  segmentSpacing: 10
 --- !u!114 &58863012
 MonoBehaviour:
   m_ObjectHideFlags: 0

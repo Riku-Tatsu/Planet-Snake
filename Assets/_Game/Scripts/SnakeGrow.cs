@@ -26,13 +26,13 @@ public class SnakeGrow : MonoBehaviour
 
             if (bodySegments.Count == 0)
             {
-                // Spawn the first segment directly behind the head
-                spawnPosition = armatureOrigin.position - armatureOrigin.forward * segmentSpacing;
+                // Spawn the first segment directly at the armature origin
+                spawnPosition = armatureOrigin.position;
                 spawnRotation = armatureOrigin.rotation;
             }
             else
             {
-                // Spawn subsequent segments at the last position in the history
+                // Spawn subsequent segments with spacing
                 int historyIndex = Mathf.Clamp((bodySegments.Count + 1) * (int)segmentSpacing, 0, positionHistory.Count - 1);
                 spawnPosition = positionHistory[historyIndex];
                 spawnRotation = bodySegments[bodySegments.Count - 1].transform.rotation;
@@ -63,7 +63,7 @@ public class SnakeGrow : MonoBehaviour
             int historyIndex = Mathf.Clamp((i + 1) * (int)segmentSpacing, 0, positionHistory.Count - 1);
             Vector3 newPosition = positionHistory[historyIndex];
             Vector3 direction = newPosition - bodySegments[i].transform.position;
-            
+
             if (direction != Vector3.zero)
             {
                 Quaternion newRotation = Quaternion.LookRotation(direction);
@@ -71,6 +71,34 @@ public class SnakeGrow : MonoBehaviour
             }
 
             bodySegments[i].transform.position = newPosition;
+
+            // Find and align the bones without changing their local Y position
+            Transform bone1 = bodySegments[i].transform.Find("Armature/BodySeg1");
+            Transform bone2 = bodySegments[i].transform.Find("Armature/BodySeg2");
+
+            if (bone1 != null && bone2 != null)
+            {
+                // Get initial local positions
+                Vector3 bone1InitialLocalPosition = bone1.localPosition;
+                Vector3 bone2InitialLocalPosition = bone2.localPosition;
+
+                // Compute the direction for the bones
+                Vector3 boneDirection = newPosition - positionHistory[Mathf.Max(0, historyIndex - 1)];
+
+                if (boneDirection != Vector3.zero)
+                {
+                    Quaternion boneRotation = Quaternion.LookRotation(boneDirection);
+                    boneRotation *= Quaternion.Euler(-90, 0, 0); // Adjust for initial -90 rotation on X-axis
+
+                    // Apply rotation without altering local Y position
+                    bone1.rotation = boneRotation;
+                    bone2.rotation = boneRotation;
+
+                    // Restore initial local positions for Y offset
+                    bone1.localPosition = new Vector3(bone1.localPosition.x, bone1InitialLocalPosition.y, bone1.localPosition.z);
+                    bone2.localPosition = new Vector3(bone2.localPosition.x, bone2InitialLocalPosition.y, bone2.localPosition.z);
+                }
+            }
         }
     }
 
