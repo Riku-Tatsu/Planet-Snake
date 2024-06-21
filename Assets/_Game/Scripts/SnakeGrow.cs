@@ -33,7 +33,7 @@ public class SnakeGrow : MonoBehaviour
             else
             {
                 // Spawn subsequent segments with spacing
-                int historyIndex = Mathf.Clamp((bodySegments.Count + 1) * (int)segmentSpacing, 0, positionHistory.Count - 1);
+                int historyIndex = Mathf.Clamp(bodySegments.Count * (int)segmentSpacing, 0, positionHistory.Count - 1);
                 spawnPosition = positionHistory[historyIndex];
                 spawnRotation = bodySegments[bodySegments.Count - 1].transform.rotation;
             }
@@ -60,13 +60,13 @@ public class SnakeGrow : MonoBehaviour
         // Update the position and rotation of the body segments
         for (int i = 0; i < bodySegments.Count; i++)
         {
-            int historyIndex = Mathf.Clamp((i + 1) * (int)segmentSpacing, 0, positionHistory.Count - 1);
+            int historyIndex = Mathf.Clamp(i  * (int)segmentSpacing, 0, positionHistory.Count - 1);
             Vector3 newPosition = positionHistory[historyIndex];
             Vector3 direction = newPosition - bodySegments[i].transform.position;
 
             if (direction != Vector3.zero)
             {
-                Quaternion newRotation = Quaternion.LookRotation(direction);
+                Quaternion newRotation = Quaternion.LookRotation(direction, newPosition);
                 bodySegments[i].transform.rotation = newRotation;
             }
 
@@ -87,8 +87,8 @@ public class SnakeGrow : MonoBehaviour
 
                 if (boneDirection != Vector3.zero)
                 {
-                    Quaternion boneRotation = Quaternion.LookRotation(boneDirection);
-                    boneRotation *= Quaternion.Euler(-90, 0, 0); // Adjust for initial -90 rotation on X-axis
+                    Quaternion boneRotation = Quaternion.LookRotation(boneDirection, newPosition);
+                    boneRotation *= Quaternion.Euler(0, 180, 0);
 
                     // Apply rotation without altering local Y position
                     bone1.rotation = boneRotation;
