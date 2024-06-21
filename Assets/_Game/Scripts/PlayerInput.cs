@@ -9,9 +9,10 @@ public class PlayerInput : MonoBehaviour
         float horizontalInput = Input.GetAxis("Horizontal");
         inputManager.ReceiveInput(horizontalInput);
 
+        // Process Q key press
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            inputManager.GrowSnake();
+            inputManager.ProcessQKeyPress();
         }
     }
 }

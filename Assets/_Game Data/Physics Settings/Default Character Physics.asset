@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 22bd1487bcb914744817d2a4689d15c4, type: 3}
   m_Name: Default Character Physics
   m_EditorClassIdentifier: 
-  moveSpeed: 15
+  moveSpeed: 5
   rotationSpeed: 100
   gravity: -12

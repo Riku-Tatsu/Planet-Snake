@@ -3,6 +3,7 @@ using UnityEngine;
 public class InputManager : MonoBehaviour
 {
     public CharacterPhysics characterPhysics;
+    public SnakeGrow snakeGrow;
     public bool drawDebugLines = true; // Toggle for debug lines
 
     private Vector3 inputDirection;
@@ -13,6 +14,14 @@ public class InputManager : MonoBehaviour
         characterPhysics.SetInput(horizontalInput);
     }
 
+    public void ProcessQKeyPress()
+    {
+        if (snakeGrow != null)
+        {
+            snakeGrow.OnGrow();
+        }
+    }
+
     public float GetHorizontalInput()
     {
         return inputDirection.x;
@@ -21,11 +30,6 @@ public class InputManager : MonoBehaviour
     public float GetVerticalInput()
     {
         return inputDirection.z;
-    }
-
-    public void GrowSnake()
-    {
-        characterPhysics.GrowSnake();
     }
 
     private void OnDrawGizmos()
